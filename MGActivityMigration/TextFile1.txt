@@ -1,0 +1,4 @@
+﻿Instrucciones
+
+Para ver el listado de notas en orden cronologico, se deben modificar los campos Modified By y Modified On
+Esto se logra 

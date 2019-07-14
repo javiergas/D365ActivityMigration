@@ -18,6 +18,7 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
         public void Execute(IServiceProvider serviceProvider)
         {
             ITracingService tracer = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+
             IPluginExecutionContext context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             IOrganizationServiceFactory factory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             IOrganizationService service = factory.CreateOrganizationService(context.UserId);
@@ -27,11 +28,13 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
                 Entity entity = (Entity)context.InputParameters["Target"];
                 tracer.Trace("Entiteit gevonden");
 
-                if (entity.Contains("createdby") && entity.Contains("dnbs_overriddencreatedby"))
+                if (entity.Contains("createdby") && entity.Contains("ownerid"))
                 {
-                    tracer.Trace("dnbs_overriddencreatedby heeft als waarde: " + entity["dnbs_overriddencreatedby"]);
+                    tracer.Trace("dnbs_overriddencreatedby heeft als waarde: " + entity["ownerid"]);
 
-                    entity["createdby"] = entity["dnbs_overriddencreatedby"];
+                    entity["createdby"] = entity["ownerid"];
+                    entity["modifiedby"] = entity["ownerid"];
+
                     tracer.Trace("createdby overschreven met dnbs_overriddencreatedby");
                 }
             }
